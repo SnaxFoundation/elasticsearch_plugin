@@ -1,9 +1,9 @@
-#include <eosio/elasticsearch_plugin/elasticsearch_plugin.hpp>
-#include <eosio/chain/eosio_contract.hpp>
-#include <eosio/chain/config.hpp>
-#include <eosio/chain/exceptions.hpp>
-#include <eosio/chain/transaction.hpp>
-#include <eosio/chain/types.hpp>
+#include <snax/elasticsearch_plugin/elasticsearch_plugin.hpp>
+#include <snax/chain/snax_contract.hpp>
+#include <snax/chain/config.hpp>
+#include <snax/chain/exceptions.hpp>
+#include <snax/chain/transaction.hpp>
+#include <snax/chain/types.hpp>
 
 #include <fc/io/json.hpp>
 #include <fc/utf8.hpp>
@@ -33,7 +33,7 @@
 #include "ThreadPool/ThreadPool.h"
 
 
-namespace eosio {
+namespace snax {
 
 using chain::account_name;
 using chain::action_name;
@@ -313,7 +313,7 @@ void elasticsearch_plugin_impl::applied_transaction( const chain::transaction_tr
       // from an incomplete block. This means that traces will not be recorded in speculative read-mode, but
       // users should not be using the elasticsearch_plugin in that mode anyway.
       //
-      // Allow logging traces if node is a producer for testing purposes, so a single nodeos can do both for testing.
+      // Allow logging traces if node is a producer for testing purposes, so a single snaxnode can do both for testing.
       //
       // It is recommended to run elasticsearch_plugin in read-mode = read-only.
       //
@@ -1107,7 +1107,7 @@ elasticsearch_plugin::~elasticsearch_plugin(){}
 void elasticsearch_plugin::set_program_options(options_description&, options_description& cfg) {
    cfg.add_options()
          ("elastic-queue-size,q", bpo::value<uint32_t>()->default_value(1024),
-         "The target queue size between nodeos and elasticsearch plugin thread.")
+         "The target queue size between snaxnode and elasticsearch plugin thread.")
          ("elastic-thread-pool-size", bpo::value<size_t>()->default_value(4),
           "The size of the data processing thread pool.")
          ("elastic-bulk-size-mb", bpo::value<size_t>()->default_value(5),
@@ -1133,7 +1133,7 @@ void elasticsearch_plugin::set_program_options(options_description&, options_des
          ("elastic-store-action-traces", bpo::value<bool>()->default_value(true),
           "Enables storing action traces in elasticsearch.")
          ("elastic-filter-on", bpo::value<vector<string>>()->composing(),
-          "Track actions which match receiver:action:actor. Receiver, Action, & Actor may be blank to include all. i.e. eosio:: or :transfer:  Use * or leave unspecified to include all.")
+          "Track actions which match receiver:action:actor. Receiver, Action, & Actor may be blank to include all. i.e. snax:: or :transfer:  Use * or leave unspecified to include all.")
          ("elastic-filter-out", bpo::value<vector<string>>()->composing(),
           "Do not track actions which match receiver:action:actor. Receiver, Action, & Actor may be blank to exclude all.")
          ("elastic-index-accounts", bpo::value<std::string>()->default_value("accounts"),
@@ -1159,7 +1159,7 @@ void elasticsearch_plugin::plugin_initialize(const variables_map& options) {
 
          if( options.count( "abi-serializer-max-time-ms" )) {
             uint32_t max_time = options.at( "abi-serializer-max-time-ms" ).as<uint32_t>();
-            EOS_ASSERT(max_time > chain::config::default_abi_serializer_max_time_ms,
+            SNAX_ASSERT(max_time > chain::config::default_abi_serializer_max_time_ms,
                        chain::plugin_config_exception, "--abi-serializer-max-time-ms required as default value not appropriate for parsing full blocks");
             fc::microseconds abi_serializer_max_time = app().get_plugin<chain_plugin>().get_abi_serializer_max_time();
             auto db_size = options.at( "elastic-abi-db-size-mb" ).as<size_t>();
@@ -1197,7 +1197,7 @@ void elasticsearch_plugin::plugin_initialize(const variables_map& options) {
                }
                std::vector<std::string> v;
                boost::split( v, s, boost::is_any_of( ":" ));
-               EOS_ASSERT( v.size() == 3, fc::invalid_arg_exception, "Invalid value ${s} for --elastic-filter-on", ("s", s));
+               SNAX_ASSERT( v.size() == 3, fc::invalid_arg_exception, "Invalid value ${s} for --elastic-filter-on", ("s", s));
                filter_entry fe{v[0], v[1], v[2]};
                my->filter_on.insert( fe );
             }
@@ -1209,7 +1209,7 @@ void elasticsearch_plugin::plugin_initialize(const variables_map& options) {
             for( auto& s : fo ) {
                std::vector<std::string> v;
                boost::split( v, s, boost::is_any_of( ":" ));
-               EOS_ASSERT( v.size() == 3, fc::invalid_arg_exception, "Invalid value ${s} for --elastic-filter-out", ("s", s));
+               SNAX_ASSERT( v.size() == 3, fc::invalid_arg_exception, "Invalid value ${s} for --elastic-filter-out", ("s", s));
                filter_entry fe{v[0], v[1], v[2]};
                my->filter_out.insert( fe );
             }
@@ -1245,7 +1245,7 @@ void elasticsearch_plugin::plugin_initialize(const variables_map& options) {
 
          // hook up to signals on controller
          chain_plugin* chain_plug = app().find_plugin<chain_plugin>();
-         EOS_ASSERT( chain_plug, chain::missing_chain_plugin_exception, "" );
+         SNAX_ASSERT( chain_plug, chain::missing_chain_plugin_exception, "" );
          auto& chain = chain_plug->chain();
          my->chain_id.emplace( chain.get_chain_id());
 
@@ -1268,7 +1268,7 @@ void elasticsearch_plugin::plugin_initialize(const variables_map& options) {
 
          my->init();
       } else {
-         wlog( "eosio::elasticsearch_plugin configured, but no --elastic-url specified." );
+         wlog( "snax::elasticsearch_plugin configured, but no --elastic-url specified." );
          wlog( "elasticsearch_plugin disabled." );
       }
    }

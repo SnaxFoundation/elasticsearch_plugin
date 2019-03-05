@@ -1,8 +1,8 @@
 #pragma once
-#include <eosio/chain/multi_index_includes.hpp>
-#include <eosio/chain/database_utils.hpp>
+#include <snax/chain/multi_index_includes.hpp>
+#include <snax/chain/database_utils.hpp>
 
-using namespace eosio;
+using namespace snax;
 using namespace chainbase;
 
 struct by_account;
@@ -12,9 +12,9 @@ class abi_cache: public chainbase::object<0, abi_cache> {
 
    id_type                                id;
    account_name                           account;
-   eosio::chain::shared_blob              abi;
+   snax::chain::shared_blob              abi;
 
-   void set_abi( const eosio::chain::abi_def& a ) {
+   void set_abi( const snax::chain::abi_def& a ) {
       abi.resize( fc::raw::pack_size( a ) );
       fc::datastream<char*> ds( abi.data(), abi.size() );
       fc::raw::pack( ds, a );
@@ -93,7 +93,7 @@ private:
             abi_serializer abis;
 
             if( name == chain::config::system_account_name ) {
-               // redefine eosio setabi.abi from bytes to abi_def
+               // redefine snax setabi.abi from bytes to abi_def
                // Done so that abi is stored as abi_def in elasticsearch instead of as bytes
                abi_def abi_new = abi;
                auto itr = std::find_if( abi_new.structs.begin(), abi_new.structs.end(),
@@ -108,13 +108,13 @@ private:
                         abis.add_specialized_unpack_pack( "abi_def",
                               std::make_pair<abi_serializer::unpack_function, abi_serializer::pack_function>(
                                     []( fc::datastream<const char*>& stream, bool is_array, bool is_optional ) -> fc::variant {
-                                       EOS_ASSERT( !is_array && !is_optional, chain::elasticsearch_exception, "unexpected abi_def");
+                                       SNAX_ASSERT( !is_array && !is_optional, chain::elasticsearch_exception, "unexpected abi_def");
                                        chain::bytes temp;
                                        fc::raw::unpack( stream, temp );
                                        return fc::variant( fc::raw::unpack<abi_def>( temp ) );
                                     },
                                     []( const fc::variant& var, fc::datastream<char*>& ds, bool is_array, bool is_optional ) {
-                                       EOS_ASSERT( false, chain::elasticsearch_exception, "never called" );
+                                       SNAX_ASSERT( false, chain::elasticsearch_exception, "never called" );
                                     }
                               ) );
                      }

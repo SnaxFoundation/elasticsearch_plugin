@@ -1,17 +1,17 @@
 # elasticsearch_plugin
 
-Nodeos plugin for archiving blockchain data into Elasticsearch, inspired by [mongo_db_plugin](https://github.com/EOSIO/eos/tree/master/plugins/mongo_db_plugin).
+Nodsnax plugin for archiving blockchain data into Elasticsearch, inspired by [mongo_db_plugin](https://github.com/SNAX/snax/tree/master/plugins/mongo_db_plugin).
 
-**Currently the plugin only work with [official eosio repository](https://github.com/EOSIO/eos).**
+**Currently the plugin only work with [official snax repository](https://github.com/SNAX/snax).**
 
 ## Getting Help
 - For questions about this project:
-  - [Join our Telegram group](https://t.me/eosesplugin)
-  - [Open an issue](https://github.com/EOSLaoMao/elasticsearch_plugin/issues/new)
+  - [Join our Telegram group](https://t.me/snaxesplugin)
+  - [Open an issue](https://github.com/SNAXLaoMao/elasticsearch_plugin/issues/new)
 
 ## Indices
 
-It is recommended to use other tools for indices management. Checkout [EOSLaoMao/elasticsearch-node](https://github.com/EOSLaoMao/elasticsearch-node).  
+It is recommended to use other tools for indices management. Checkout [SNAXLaoMao/elasticsearch-node](https://github.com/SNAXLaoMao/elasticsearch-node).  
 
 [Document examples](#document-examples)
 
@@ -38,7 +38,7 @@ Detail: [Benchmark](./benchmark/benchmark.md)
 Example filters:
 
 ```text
---elastic-filter-out=eosio:onblock:
+--elastic-filter-out=snax:onblock:
 --elastic-filter-out=gu2tembqgage::
 --elastic-filter-out=blocktwitter::
 ```
@@ -54,9 +54,9 @@ In the benchmark, `elasticsearch_plugin` is running with default config. For pro
 
 ## Installation
 
-### Install `EOSLaoMao/elasticlient`
+### Install `SNAXLaoMao/elasticlient`
 
-`elasticsearh_plugin` rely on [EOSLaoMao/elasticlient](https://github.com/EOSLaoMao/elasticlient)
+`elasticsearh_plugin` rely on [SNAXLaoMao/elasticlient](https://github.com/SNAXLaoMao/elasticlient)
 
 ```bash
 git clone https://github.com/WLBF/elasticlient.git
@@ -70,12 +70,12 @@ sudo cp -r "external/cpr/include/cpr" "/usr/local/include/cpr"
 sudo cp "lib/libcpr.so" "/usr/local/lib/libcpr.so"
 ```
 
-### Embed `elasticsearch_plugin` into `nodeos`
+### Embed `elasticsearch_plugin` into `snaxnode`
 
 1. Get `elasticsearch_plugin` source code.
 
 ```bash
-git clone https://github.com/EOSLaoMao/elasticsearch_plugin.git plugins/elasticsearch_plugin
+git clone https://github.com/SNAXLaoMao/elasticsearch_plugin.git plugins/elasticsearch_plugin
 cd plugins/elasticsearch_plugin
 git submodule update --init --recursive
 ```
@@ -91,7 +91,7 @@ add_subdirectory(elasticsearch_plugin) # add this line.
 ...
 ```
 
-3. Add following line to `programs/nodeos/CMakeLists.txt`.
+3. Add following line to `programs/snaxnode/CMakeLists.txt`.
 
 ```cmake
 target_link_libraries( ${NODE_EXECUTABLE_NAME}
@@ -106,11 +106,11 @@ target_link_libraries( ${NODE_EXECUTABLE_NAME}
 
 ## Usage
 
-The usage of `elasticsearch_plugin` is similar to [mongo_db_plugin](https://github.com/EOSIO/eos/tree/master/plugins/mongo_db_plugin). It is recommended that a large `--abi-serializer-max-time-ms` value be passed into the nodeos running the elasticsearch_plugin as the default abi serializer time limit is not large enough to serialize large blocks.
+The usage of `elasticsearch_plugin` is similar to [mongo_db_plugin](https://github.com/SNAX/snax/tree/master/plugins/mongo_db_plugin). It is recommended that a large `--abi-serializer-max-time-ms` value be passed into the snaxnode running the elasticsearch_plugin as the default abi serializer time limit is not large enough to serialize large blocks.
 
 ```plain
-Config Options for eosio::elasticsearch_plugin.
-  -q [ --elastic-queue-size ] arg (=1024)                       The target queue size between nodeos 
+Config Options for snax::elasticsearch_plugin.
+  -q [ --elastic-queue-size ] arg (=1024)                       The target queue size between snaxnode 
                                                                 and elasticsearch plugin thread.
   --elastic-thread-pool-size arg (=4)                           The size of the data processing thread 
                                                                 pool.
@@ -138,7 +138,7 @@ Config Options for eosio::elasticsearch_plugin.
   --elastic-filter-on arg                                       Track actions which match 
                                                                 receiver:action:actor. Receiver, 
                                                                 Action, & Actor may be blank to include
-                                                                all. i.e. eosio:: or :transfer:  Use * 
+                                                                all. i.e. snax:: or :transfer:  Use * 
                                                                 or leave unspecified to include all.
   --elastic-filter-out arg                                      Do not track actions which match 
                                                                 receiver:action:actor. Receiver, 
@@ -155,7 +155,7 @@ Config Options for eosio::elasticsearch_plugin.
 
 ## TODO
 
-- [ ] Due to `libcurl` [100-continue feature](https://curl.haxx.se/mail/lib-2017-07/0013.html), consider replace [EOSLaoMao/elasticlient](https://github.com/EOSLaoMao/elasticlient) with other simple http client like [https://cpp-netlib.org/#](https://cpp-netlib.org/#)
+- [ ] Due to `libcurl` [100-continue feature](https://curl.haxx.se/mail/lib-2017-07/0013.html), consider replace [SNAXLaoMao/elasticlient](https://github.com/SNAXLaoMao/elasticlient) with other simple http client like [https://cpp-netlib.org/#](https://cpp-netlib.org/#)
 
 
 ## Document examples
@@ -163,15 +163,15 @@ Config Options for eosio::elasticsearch_plugin.
 * accounts
 ```
 {
-  "creator": "eosio",
+  "creator": "snax",
   "pub_keys": [
     {
       "permission": "owner",
-      "key": "EOS5Ga8VeykSY7SXJyHbnanSPHPcQ3LmKDtJjJBJHokgYDxeokP4R"
+      "key": "SNAX5Ga8VeykSY7SXJyHbnanSPHPcQ3LmKDtJjJBJHokgYDxeokP4R"
     },
     {
       "permission": "active",
-      "key": "EOS5Ga8VeykSY7SXJyHbnanSPHPcQ3LmKDtJjJBJHokgYDxeokP4R"
+      "key": "SNAX5Ga8VeykSY7SXJyHbnanSPHPcQ3LmKDtJjJBJHokgYDxeokP4R"
     }
   ],
   "account_create_time": "2018-06-09T12:01:56.500",
@@ -184,13 +184,13 @@ Config Options for eosio::elasticsearch_plugin.
 ```
 {
   "receipt": {
-    "receiver": "eosio.token",
+    "receiver": "snax.token",
     "act_digest": "94753d3277e8759aaa7e4ee8f19cfa36013180e0d66d62a4a2196d76786d574a",
     "global_sequence": 1730634,
     "recv_sequence": 459727,
     "auth_sequence": [
       [
-        "eosio",
+        "snax",
         1730627
       ]
     ],
@@ -198,15 +198,15 @@ Config Options for eosio::elasticsearch_plugin.
     "abi_sequence": 1
   },
   "act": {
-    "account": "eosio.token",
+    "account": "snax.token",
     "name": "transfer",
     "authorization": [
       {
-        "actor": "eosio",
+        "actor": "snax",
         "permission": "active"
       }
     ],
-    "data": "{\"from\":\"eosio\",\"to\":\"eosio.ram\",\"quantity\":\"0.1219 EOS\",\"memo\":\"buy ram\"}",
+    "data": "{\"from\":\"snax\",\"to\":\"snax.ram\",\"quantity\":\"0.1219 SNAX\",\"memo\":\"buy ram\"}",
     "hex_data": "0000000000ea3055000090e602ea3055c30400000000000004454f5300000000076275792072616d"
   },
   "context_free": false,
@@ -239,13 +239,13 @@ Config Options for eosio::elasticsearch_plugin.
   "action_traces": [
     {
       "receipt": {
-        "receiver": "eosio",
+        "receiver": "snax",
         "act_digest": "6556d890f6238c244020411322d6a40b5c03519e3da17dc05f525387ae850914",
         "global_sequence": 1874256,
         "recv_sequence": 878486,
         "auth_sequence": [
           [
-            "eosio",
+            "snax",
             1874249
           ]
         ],
@@ -253,22 +253,22 @@ Config Options for eosio::elasticsearch_plugin.
         "abi_sequence": 2
       },
       "act": {
-        "account": "eosio",
+        "account": "snax",
         "name": "newaccount",
         "authorization": [
           {
-            "actor": "eosio",
+            "actor": "snax",
             "permission": "active"
           }
         ],
         "data": {
-          "creator": "eosio",
+          "creator": "snax",
           "name": "gi4tcnzwhege",
           "owner": {
             "threshold": 1,
             "keys": [
               {
-                "key": "EOS8M7Qbuq2U5PBph9QhBm5o7sHzuxCgMewwWnmLk9be2WshZEXZB",
+                "key": "SNAX8M7Qbuq2U5PBph9QhBm5o7sHzuxCgMewwWnmLk9be2WshZEXZB",
                 "weight": 1
               }
             ],
@@ -279,7 +279,7 @@ Config Options for eosio::elasticsearch_plugin.
             "threshold": 1,
             "keys": [
               {
-                "key": "EOS8M7Qbuq2U5PBph9QhBm5o7sHzuxCgMewwWnmLk9be2WshZEXZB",
+                "key": "SNAX8M7Qbuq2U5PBph9QhBm5o7sHzuxCgMewwWnmLk9be2WshZEXZB",
                 "weight": 1
               }
             ],
@@ -314,7 +314,7 @@ Config Options for eosio::elasticsearch_plugin.
 ```
 {
   "timestamp": "2018-06-09T12:03:37.500",
-  "producer": "eosio",
+  "producer": "snax",
   "confirmed": 0,
   "previous": "00000288461e6ef331cb87ebf3e8fda122dc4c1b5cfd313b080a762ce0a472df",
   "transaction_mroot": "a850a72dc0fc67adce701455551c1d82246fae12055f5d10b66ba55921a0dc34",
@@ -338,7 +338,7 @@ Config Options for eosio::elasticsearch_plugin.
     "producers": [
       {
         "producer_name": "genesisblock",
-        "block_signing_key": "EOS8Yid3mE5bwWMvGGKYEDxFRGHostu5xCzFanyJP1UdgZ5mpPdwZ"
+        "block_signing_key": "SNAX8Yid3mE5bwWMvGGKYEDxFRGHostu5xCzFanyJP1UdgZ5mpPdwZ"
       }
     ]
   },
@@ -352,7 +352,7 @@ Config Options for eosio::elasticsearch_plugin.
   },
   "producer_to_last_produced": [
     [
-      "eosio",
+      "snax",
       12150
     ],
     [
@@ -398,7 +398,7 @@ Config Options for eosio::elasticsearch_plugin.
       154025
     ]
   ],
-  "block_signing_key": "EOS8Yid3mE5bwWMvGGKYEDxFRGHostu5xCzFanyJP1UdgZ5mpPdwZ",
+  "block_signing_key": "SNAX8Yid3mE5bwWMvGGKYEDxFRGHostu5xCzFanyJP1UdgZ5mpPdwZ",
   "id": "000259aaeecdcdd5af5196321bc74643169962a4c20dff0cacb6225c4a7ab2c2",
   "irreversible": true
 }

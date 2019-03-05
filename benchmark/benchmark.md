@@ -28,7 +28,7 @@ The MongoDB and Elasticsearch are both running in the docker container with basi
 ### Command-line
 
 ```bash
-./build/programs/nodeos/nodeos \
+./build/programs/snaxnode/snaxnode \
     --data-dir=data \
     --config-dir=config \
     --abi-serializer-max-time-ms=1000000 \
@@ -37,11 +37,11 @@ The MongoDB and Elasticsearch are both running in the docker container with basi
     --elastic-queue-size=512 \
     --elastic-index-wipe
 
-./build/programs/nodeos/nodeos \
+./build/programs/snaxnode/snaxnode \
     --data-dir=data \
     --config-dir=config \
     --replay-blockchain \
-    --mongodb-uri=mongodb://root:example@localhost:27017/eos?authSource=admin \
+    --mongodb-uri=mongodb://root:example@localhost:27017/snax?authSource=admin \
     --mongodb-queue-size=512 \
     --mongodb-abi-cache-size=8192 \
     --mongodb-wipe

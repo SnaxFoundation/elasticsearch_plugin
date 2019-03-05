@@ -5,7 +5,7 @@
 #include <elasticlient/client.h>
 #include <elasticlient/bulk.h>
 
-namespace eosio {
+namespace snax {
 
 class elastic_client
 {

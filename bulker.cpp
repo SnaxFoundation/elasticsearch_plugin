@@ -1,7 +1,7 @@
 #include "bulker.hpp"
 #include "exceptions.hpp"
 
-namespace eosio {
+namespace snax {
 
 bulker::~bulker() {
    ilog("draining bulker, size: ${n}", ("n", body_size));
@@ -64,7 +64,7 @@ bulker_pool::bulker_pool(size_t size, size_t bulk_size,
 
 bulker& bulker_pool::get() {
    if ( pool_size == 0 ) {
-      EOS_THROW(chain::empty_bulker_pool_exception, "empty pool");
+      SNAX_THROW(chain::empty_bulker_pool_exception, "empty pool");
    }
 
    size_t cur_idx = index % pool_size;
