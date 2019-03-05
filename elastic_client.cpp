@@ -5,12 +5,12 @@
 
 #include <boost/format.hpp>
 
-#include <eosio/chain/exceptions.hpp>
+#include <snax/chain/exceptions.hpp>
 
 #include "elastic_client.hpp"
 #include "exceptions.hpp"
 
-namespace eosio
+namespace snax
 {
 
 namespace
@@ -29,7 +29,7 @@ bool elastic_client::head(const std::string &url_path)
    } else if ( resp.status_code == 404 ) {
       return false;
    } else {
-      EOS_THROW(chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
+      SNAX_THROW(chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
    }
 }
 
@@ -42,7 +42,7 @@ bool elastic_client::doc_exist(const std::string &index_name, const std::string 
 void elastic_client::index(const std::string &index_name, const std::string &body, const std::string &id)
 {
    cpr::Response resp = client.index(index_name, "_doc", id, body);
-   EOS_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
+   SNAX_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
 }
 
 uint32_t elastic_client::create(const std::string &index_name, const std::string &body, const std::string &id)
@@ -50,7 +50,7 @@ uint32_t elastic_client::create(const std::string &index_name, const std::string
    auto url = boost::str(boost::format("%1%/_doc/%2%/_create") % index_name % id );
    cpr::Response resp = client.performRequest(elasticlient::Client::HTTPMethod::PUT, url, body);
    if ( (!is_2xx(resp.status_code)) && (resp.status_code != 409) )
-      EOS_THROW(chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
+      SNAX_THROW(chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
    return resp.status_code;
 }
 
@@ -59,7 +59,7 @@ void elastic_client::init_index(const std::string &index_name, const std::string
 {
    if ( !head(index_name) ) {
       cpr::Response resp = client.performRequest(elasticlient::Client::HTTPMethod::PUT, index_name, mappings);
-      EOS_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
+      SNAX_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
    }
 }
 
@@ -73,7 +73,7 @@ uint64_t elastic_client::count_doc(const std::string &index_name, const std::str
 {
    auto url = boost::str(boost::format("%1%/_doc/_count") % index_name );
    cpr::Response resp = client.performRequest(elasticlient::Client::HTTPMethod::GET, url, query);
-   EOS_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
+   SNAX_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
    auto v = fc::json::from_string(resp.text);
    return v["count"].as_uint64();
 }
@@ -81,14 +81,14 @@ uint64_t elastic_client::count_doc(const std::string &index_name, const std::str
 void elastic_client::get(const std::string &index_name, const std::string &id, fc::variant &res)
 {
    cpr::Response resp = client.get(index_name, "_doc", id);
-   EOS_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
+   SNAX_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
    res = fc::json::from_string(resp.text);
 }
 
 void elastic_client::search(const std::string &index_name, fc::variant &v, const std::string &query)
 {
    cpr::Response resp = client.search(index_name, "_doc", query);
-   EOS_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
+   SNAX_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
    v = fc::json::from_string(resp.text);
 }
 
@@ -96,7 +96,7 @@ void elastic_client::delete_by_query(const std::string &index_name, const std::s
 {
    auto url = boost::str(boost::format("%1%/_doc/_delete_by_query") % index_name );
    cpr::Response resp = client.performRequest(elasticlient::Client::HTTPMethod::POST, url, query);
-   EOS_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
+   SNAX_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
 }
 
 void elastic_client::bulk_perform(elasticlient::SameIndexBulkData &bulk)
@@ -105,26 +105,26 @@ void elastic_client::bulk_perform(elasticlient::SameIndexBulkData &bulk)
    auto body = bulk.body();
    auto url = boost::str(boost::format("%1%/_bulk") % index_name);
    cpr::Response resp = client.performRequest(elasticlient::Client::HTTPMethod::POST, url, body);
-   EOS_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
+   SNAX_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
    
    fc::variant text_doc( fc::json::from_string(resp.text) );
-   EOS_ASSERT(text_doc["errors"].as_bool() == false, chain::bulk_fail_exception, "bulk perform errors: ${text}", ("text", resp.text));
+   SNAX_ASSERT(text_doc["errors"].as_bool() == false, chain::bulk_fail_exception, "bulk perform errors: ${text}", ("text", resp.text));
 }
 
 void elastic_client::bulk_perform(const std::string &bulk)
 {
    cpr::Response resp = client.performRequest(elasticlient::Client::HTTPMethod::POST, "_bulk", bulk);
-   EOS_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
+   SNAX_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
    
    fc::variant text_doc( fc::json::from_string(resp.text) );
-   EOS_ASSERT(text_doc["errors"].as_bool() == false, chain::bulk_fail_exception, "bulk perform errors: ${text}", ("text", resp.text));
+   SNAX_ASSERT(text_doc["errors"].as_bool() == false, chain::bulk_fail_exception, "bulk perform errors: ${text}", ("text", resp.text));
 }
 
 void elastic_client::update(const std::string &index_name, const std::string &id, const std::string &body)
 {
    auto url = boost::str(boost::format("%1%/_doc/%2%/_update") % index_name % id);
    cpr::Response resp = client.performRequest(elasticlient::Client::HTTPMethod::POST, url, body);
-   EOS_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
+   SNAX_ASSERT(is_2xx(resp.status_code), chain::response_code_exception, "${code} ${text}", ("code", resp.status_code)("text", resp.text));
 }
 
-} // namespace eosio
+} // namespace snax

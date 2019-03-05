@@ -1,11 +1,11 @@
 #pragma once
 
-#include <eosio/chain/exceptions.hpp>
+#include <snax/chain/exceptions.hpp>
 #include <fc/exception/exception.hpp>
 #include <appbase/application.hpp>
 #include <boost/core/typeinfo.hpp>
 
-namespace eosio {
+namespace snax {
 
 namespace chain {
 
@@ -55,4 +55,4 @@ inline void handle_elasticsearch_exception( const std::string& desc, int line_nu
    }
 }
 
-} // eosio::chain
+} // snax::chain

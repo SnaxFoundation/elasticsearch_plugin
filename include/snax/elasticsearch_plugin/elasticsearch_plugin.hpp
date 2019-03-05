@@ -1,12 +1,12 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE.txt
+ *  @copyright defined in snax/LICENSE.txt
  */
 #pragma once
 #include <appbase/application.hpp>
-#include <eosio/chain_plugin/chain_plugin.hpp> 
+#include <snax/chain_plugin/chain_plugin.hpp> 
 
-namespace eosio {
+namespace snax {
 
 using namespace appbase;
 

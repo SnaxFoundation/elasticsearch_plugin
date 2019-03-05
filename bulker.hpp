@@ -3,7 +3,7 @@
 
 #include "elastic_client.hpp"
 
-namespace eosio {
+namespace snax {
 
 class bulker
 {
