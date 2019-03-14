@@ -648,7 +648,7 @@ void elasticsearch_plugin_impl::_process_applied_transaction( chain::transaction
 
       upsert_account_task_queue.emplace( std::move(f) );
 
-      //check_task_queue_size();
+      check_task_queue_size();
       thread_pool->enqueue(
          [ this ]()
          {
@@ -662,7 +662,7 @@ void elasticsearch_plugin_impl::_process_applied_transaction( chain::transaction
    }
 
    if( base_action_traces.empty() ) return; //< do not index transaction_trace if all action_traces filtered out
-   //check_task_queue_size();
+   check_task_queue_size();
    thread_pool->enqueue(
       [ t{std::move(t)}, base_action_traces{std::move(base_action_traces)}, this ]()
       {
@@ -718,7 +718,7 @@ void elasticsearch_plugin_impl::_process_applied_transaction( chain::transaction
 }
 
 void elasticsearch_plugin_impl::_process_accepted_transaction( chain::transaction_metadata_ptr t ) {
-   //check_task_queue_size();
+   check_task_queue_size();
    thread_pool->enqueue(
       [ t{std::move(t)}, this ]()
       {
@@ -768,7 +768,7 @@ void elasticsearch_plugin_impl::_process_accepted_transaction( chain::transactio
 }
 
 void elasticsearch_plugin_impl::_process_accepted_block( chain::block_state_ptr bs ) {
-   //check_task_queue_size();
+   check_task_queue_size();
    thread_pool->enqueue(
       [ bs{std::move(bs)}, this ]()
       {
@@ -840,7 +840,7 @@ void elasticsearch_plugin_impl::_process_accepted_block( chain::block_state_ptr 
 }
 
 void elasticsearch_plugin_impl::_process_irreversible_block(chain::block_state_ptr bs) {
-   //check_task_queue_size();
+   check_task_queue_size();
    thread_pool->enqueue(
       [ bs{std::move(bs)}, this ]()
       {
