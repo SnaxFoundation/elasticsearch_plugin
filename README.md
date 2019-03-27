@@ -35,7 +35,7 @@ Detail: [Benchmark](./benchmark/benchmark.md)
 
 ## Performance Tuning
 
-Example filters:
+Recommended filters:
 
 ```text
 --elastic-filter-out=snax.token:transfer:snax.vpay
