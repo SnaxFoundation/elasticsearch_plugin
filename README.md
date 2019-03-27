@@ -38,9 +38,12 @@ Detail: [Benchmark](./benchmark/benchmark.md)
 Example filters:
 
 ```text
+--elastic-filter-out=snax.token:transfer:snax.vpay
+--elastic-filter-out=snax.token:transfer:snax.bpay
+--elastic-filter-out=snax.token:transfer:snax
+--elastic-filter-out=snax.vpay:transfer:snax
+--elastic-filter-out=snax.bpay:transfer:snax
 --elastic-filter-out=snax:onblock:
---elastic-filter-out=gu2tembqgage::
---elastic-filter-out=blocktwitter::
 ```
 
 [Tune for indexing speed](https://www.elastic.co/guide/en/elasticsearch/reference/master/tune-for-indexing-speed.html)
