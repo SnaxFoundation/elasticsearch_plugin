@@ -754,7 +754,7 @@ void elasticsearch_plugin_impl::_process_accepted_transaction( chain::transactio
          fc::from_variant( doc["actions"], actions_doc );
          actions_doc["data"] = fc::json::to_string( act_doc["data"] );
 
-         doc["actions"] = actions_doc
+         doc["actions"] = actions_doc;
 
          fc::mutable_variant_object action_doc;
          action_doc("_index", trans_index);
