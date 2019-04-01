@@ -752,7 +752,7 @@ void elasticsearch_plugin_impl::_process_accepted_transaction( chain::transactio
          fc::mutable_variant_object actions_doc;
 
          fc::from_variant( doc["actions"], actions_doc );
-         actions_doc["data"] = fc::json::to_string( act_doc["data"] );
+         actions_doc["data"] = fc::json::to_string( actions_doc["data"] );
 
          doc["actions"] = actions_doc;
 
@@ -943,7 +943,7 @@ void elasticsearch_plugin_impl::_process_irreversible_block(chain::block_state_p
                fc::mutable_variant_object actions_doc;
 
                fc::from_variant( doc["actions"], actions_doc );
-               actions_doc["data"] = fc::json::to_string( act_doc["data"] );
+               actions_doc["data"] = fc::json::to_string( actions_doc["data"] );
 
                doc["actions"] = actions_doc;
 
