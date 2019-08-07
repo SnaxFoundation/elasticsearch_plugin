@@ -592,6 +592,12 @@ void elasticsearch_plugin_impl::_process_applied_transaction( chain::transaction
 
    std::stack<std::reference_wrapper<chain::action_trace>> stack;
    for( auto& atrace : t->action_traces ) {
+      if (
+         atrace.receipt.receiver == chain::config::system_account_name
+         && atrace.act.name == N(onblock)
+         && atrace.act.account == chain::config::system_account_name
+      ) return; //> exclude all onblock receipts
+
       stack.emplace(atrace);
 
       while ( !stack.empty() )
